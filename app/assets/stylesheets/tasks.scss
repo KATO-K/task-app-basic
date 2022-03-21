@@ -1,0 +1,24 @@
+#task-name {
+  font-size: 1.8rem;
+}
+
+#table-tasks {
+  th {
+    vertical-align: middle;
+  }
+  td {
+    vertical-align: middle;
+  }
+}
+
+#table-task {
+  table-layout: fixed; width: 100%;
+  th {
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: center;
+  }
+  td {
+    word-wrap: break-word;
+  }
+}
