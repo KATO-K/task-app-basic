@@ -1,3 +1,5 @@
+<% provide(:title, current_user.name) %>
+
 <h1>タスク詳細</h1>
 
 <div class="row">
@@ -30,8 +32,8 @@
     </table>
     
     <div>
-      <%= link_to "編集", edit_user_task_path(@user, @task), class: "btn btn-lg btn-success" %>
-      <%= link_to "削除", user_task_path(@user, @task), method: :delete,
+      <%= link_to "編集", edit_user_task_path(current_user, @task), class: "btn btn-lg btn-success" %>
+      <%= link_to "削除", user_task_path(current_user, @task), method: :delete,
       data: { confirm: "「#{@task.name}」を削除します。よろしいですか？" }, class: "btn btn-lg btn-danger" %>
     </div>
   </div>    

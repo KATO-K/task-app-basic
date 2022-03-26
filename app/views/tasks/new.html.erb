@@ -1,17 +1,14 @@
-<h1>タスク新規作成</h1>
-
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <%= form_with(model: @task, url: user_tasks_path(@user), local: true) do |f| %>
-      <%= render partial: 'shared/error_messages', locals: { obj: @task } %>
-      
-      <%= f.label :name, class: "label-form" %>
-      <%= f.text_field :name, class: "form-control" %>
-
-      <%= f.label :description, class: "label-form" %>
-      <%= f.text_area :description, rows: 5, class: "form-control" %>
-
-      <%= f.submit "新規登録", class: "btn btn-lg btn-primary btn-form" %>
-    <% end %>
+<div class="main tasks-new">
+  <div class="container">
+    <h1 class="form-heading">新規投稿</h1>
+      <%= form_tag(user_tasks_path, method: :post) do %>
+        <div class="form">
+          <div class="form-body">
+            <input name="name">
+            <textarea name="description"></textarea>
+            <input type="submit" value="投稿">
+          </div>
+        </div>
+      <% end %>
   </div>
 </div>
