@@ -1,52 +1,63 @@
 class TasksController < ApplicationController
-   before_action :admin_or_correct_user,only: [:update, :destroy]
+  before_action :set_user
+  before_action :set_task, only: %i(show edit update destroy)
+  before_action :logged_in_user
+  before_action :correct_user
   
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    @tasks = @user.tasks.order(id: "DESC")
   end
-  
+
   def show
-    @task = Task.find(params[:id])
-    @user = User.find(@task.user_id)
   end
-  
+
   def new
+    @task = Task.new
   end
   
   def create
-    @task = Task.new(name: params[:name], description:params[:description], user_id:params[:user_id])
-   
+    @task = @user.tasks.build(task_params)
     if @task.save
       flash[:success] = "タスクを新規作成しました。"
-      redirect_to user_tasks_url
+      redirect_to user_tasks_url @user
     else
-      flash[:danger] = @task.errors.full_messages.join("<br>")
+      render :new
     end
   end
-  
+
   def edit
-    @task = Task.find(params[:id])
+    
   end
   
   def update
-    @task = Task.find(params[:id])
-    @task.description = params[:description]
-    @task.save
-    redirect_to user_tasks_url
+    if @task.update_attributes(task_params)
+      flash[:success] = "タスクを更新しました。"
+      redirect_to user_task_url(@user, @task)
+    else
+      render :edit
+    end
   end
   
   def destroy
-    @task = Task.find(params[:id])
     @task.destroy
-    redirect_to user_tasks_url
+    flash[:success] = "タスクを削除しました。"
+    redirect_to user_tasks_url @user
   end
   
-  def admin_or_correct_user
-    @user = User.find(params[:user_id]) if @user.blank?
-    unless current_user?(@user) || current_user.admin?
-      flash[:danger] = "編集権限がありません。"
-      redirect_to(root_url)
-    end  
-  end
-  
+  private
+
+    def task_params
+     params.require(:task).permit(:name, :description)
+    end
+    
+    def set_user
+      @user = User.find(params[:user_id])
+    end
+
+    def set_task
+      unless @task = @user.tasks.find_by(id: params[:id])
+        flash[:danger] = "権限がありません。"
+        redirect_to user_tasks_url @user
+      end
+    end
 end
